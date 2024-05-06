@@ -1,13 +1,11 @@
 import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
-  final String staffId;
   final String token;
   final bool biometricEnabled;
   final String verificationCode;
 
   const User({
-    required this.staffId,
     required this.token,
     required this.biometricEnabled,
     required this.verificationCode,
@@ -15,7 +13,6 @@ class User extends Equatable {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      staffId: json['staffId'],
       token: json['token'],
       biometricEnabled: json['biometricEnabled'],
       verificationCode: json['verificationCode'],
@@ -24,7 +21,6 @@ class User extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      'staffId': staffId,
       'token': token,
       'biometricEnabled': biometricEnabled,
       'verificationCode': verificationCode,
@@ -32,6 +28,5 @@ class User extends Equatable {
   }
 
   @override
-  List<Object> get props =>
-      [staffId, token, biometricEnabled, verificationCode];
+  List<Object> get props => [token, biometricEnabled, verificationCode];
 }
