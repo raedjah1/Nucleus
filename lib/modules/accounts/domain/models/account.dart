@@ -1,7 +1,7 @@
-import 'package:nucleus/modules/auth/domain/models/company.dart';
-import 'package:nucleus/modules/auth/domain/models/department.dart';
-import 'package:nucleus/modules/auth/domain/models/job_title.dart';
-import 'package:nucleus/modules/auth/domain/models/supervisor.dart';
+import 'package:nucleus/modules/accounts/domain/models/company.dart';
+import 'package:nucleus/modules/accounts/domain/models/department.dart';
+import 'package:nucleus/modules/accounts/domain/models/job_title.dart';
+import 'package:nucleus/modules/accounts/domain/models/supervisor.dart';
 
 class Account {
   final String id;
