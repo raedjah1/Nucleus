@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:nucleus/modules/accounts/domain/repositories/user_repo.dart';
 import 'package:nucleus/shared/core/failure.dart';
-import 'package:nucleus/shared/core/service.dart';
+import 'package:nucleus/shared/core/usecase.dart';
 
 class RegisterWithEmailRequest {
   final String email;
@@ -15,11 +15,11 @@ class RegisterWithEmailRequest {
 
 typedef RegisterWithEmailResponse = Future<Either<Failure, String>>;
 
-class RegisterWithEmailService
-    implements Service<RegisterWithEmailRequest, RegisterWithEmailResponse> {
+class RegisterWithEmailUseCase
+    implements UseCase<RegisterWithEmailRequest, RegisterWithEmailResponse> {
   final UserRepo _userRepo;
 
-  RegisterWithEmailService(this._userRepo);
+  RegisterWithEmailUseCase(this._userRepo);
 
   @override
   RegisterWithEmailResponse execute(RegisterWithEmailRequest request) async {
