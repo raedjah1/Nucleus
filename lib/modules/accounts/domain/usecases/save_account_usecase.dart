@@ -4,18 +4,18 @@ import 'package:nucleus/modules/accounts/domain/repositories/account_repo.dart';
 import 'package:nucleus/shared/core/failure.dart';
 import 'package:nucleus/shared/core/usecase.dart';
 
-typedef GetAccountsResponse = Future<Either<Failure, List<Account>>>;
+typedef SaveSessionResponse = Future<Either<Failure, void>>;
 
-class GetAccountsUseCase implements UseCase<void, GetAccountsResponse> {
+class SaveSessionUseCase implements UseCase<String, SaveSessionResponse> {
   final AccountRepo _accountRepo;
 
-  GetAccountsUseCase(this._accountRepo);
+  SaveSessionUseCase(this._accountRepo);
 
   @override
-  GetAccountsResponse execute(void request) async {
+  SaveSessionResponse execute(String request) async {
     try {
-      final accounts = await _accountRepo.getAccounts();
-      return right(accounts);
+      await _accountRepo.saveSession(request);
+      return right(null);
     } on Exception catch (e) {
       return left(ApiFailure(e.toString()));
     } catch (e) {
