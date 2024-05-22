@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nucleus/shared/themes/constants.dart';
+import 'package:nucleus/shared/themes/text_theme.dart';
 
 final ThemeData lightTheme = _lightTheme();
 
@@ -33,5 +34,6 @@ ThemeData _lightTheme() {
         color: Colors.black,
       ),
     ),
+    textTheme: textTheme(base.textTheme),
   );
 }

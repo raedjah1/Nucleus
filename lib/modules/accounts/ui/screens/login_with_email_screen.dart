@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nucleus/modules/accounts/data/bloc/registration_bloc.dart';
+import 'package:nucleus/modules/accounts/index.dart' as accounts_di;
 
 class LoginWithEmailScreen extends StatefulWidget {
   const LoginWithEmailScreen({super.key});
@@ -10,28 +13,49 @@ class LoginWithEmailScreen extends StatefulWidget {
 class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login with email"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              "You have pushed the button this many times:",
+    return BlocProvider(
+      create: (_) => accounts_di.sl<RegistrationBloc>(),
+      child: BlocListener<RegistrationBloc, RegistrationState>(
+        listener: (context, state) {
+          if (state is RegistrationFailed) {
+            // Navigator.of(context).pushNamed("/home");
+          } else if (state is TokenSaved) {}
+        },
+        child: Scaffold(
+          body: SafeArea(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    "Login with Email",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const TextField(
+                    decoration: InputDecoration(
+                      labelText: "Email",
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const TextField(
+                    decoration: InputDecoration(
+                      labelText: "Password",
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: null,
+                    child: const Text("Login"),
+                  ),
+                ],
+              ),
             ),
-            Text(
-              "_counter",
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        tooltip: "Increment",
-        child: const Icon(Icons.add),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nucleus/shared/themes/constants.dart';
+import 'package:nucleus/shared/themes/text_theme.dart';
 
 final darkTheme = _darkTheme();
 
@@ -33,5 +34,6 @@ ThemeData _darkTheme() {
         color: Colors.white,
       ),
     ),
+    textTheme: textTheme(base.textTheme),
   );
 }
