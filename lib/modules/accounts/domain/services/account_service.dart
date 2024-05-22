@@ -29,4 +29,11 @@ class AccountService implements AccountRepo {
   Future<void> saveSession(String token) async {
     await _localStorage.save('token', token);
   }
+
+  @override
+  Future<List<Account>> getAccounts() async {
+    final response =
+        await _restClient.get<List<Map<String, dynamic>>>('/accounts');
+    return response.map((e) => Account.fromJson(e)).toList();
+  }
 }

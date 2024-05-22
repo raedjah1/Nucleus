@@ -10,6 +10,29 @@ class LoginWithEmailScreen extends StatefulWidget {
 class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Login with email"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              "You have pushed the button this many times:",
+            ),
+            Text(
+              "_counter",
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: null,
+        tooltip: "Increment",
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }

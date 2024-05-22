@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:nucleus/modules/accounts/data/bloc/authentication_bloc.dart';
+import 'package:nucleus/modules/accounts/data/bloc/directory_bloc.dart';
 import 'package:nucleus/modules/accounts/data/bloc/registration_bloc.dart';
 import 'package:nucleus/modules/accounts/domain/repositories/account_repo.dart';
 import 'package:nucleus/modules/accounts/domain/repositories/user_repo.dart';
@@ -7,6 +8,7 @@ import 'package:nucleus/modules/accounts/domain/services/account_service.dart';
 import 'package:nucleus/modules/accounts/domain/services/user_service.dart';
 import 'package:nucleus/modules/accounts/domain/usecases/get_account_with_token_usecase.dart';
 import 'package:nucleus/modules/accounts/domain/usecases/get_session_usecase.dart';
+import 'package:nucleus/modules/accounts/domain/usecases/get_staff_directory_usecase.dart';
 import 'package:nucleus/modules/accounts/domain/usecases/logout_usecase.dart';
 import 'package:nucleus/modules/accounts/domain/usecases/register_with_email_usecase.dart';
 import 'package:nucleus/modules/accounts/domain/usecases/register_with_phone_usecase.dart';
@@ -69,6 +71,11 @@ void initFeatures() {
       sl(),
     ),
   );
+  sl.registerLazySingleton(
+    () => GetStaffDirectoryUseCase(
+      sl(),
+    ),
+  );
 
   // Blocs
   sl.registerFactory(
@@ -84,6 +91,11 @@ void initFeatures() {
       getSessionUseCase: sl(),
       getAccountWithTokenUseCase: sl(),
       logoutUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => DirectoryBloc(
+      getStaffDirectoryUseCase: sl(),
     ),
   );
 }
