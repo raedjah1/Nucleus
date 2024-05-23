@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class LoginWithPhoneFormWidget extends StatelessWidget {
-  const LoginWithPhoneFormWidget({super.key});
+  final TextEditingController phoneController;
+  final Function onRegister;
+
+  const LoginWithPhoneFormWidget({
+    super.key,
+    required this.phoneController,
+    required this.onRegister,
+  });
 
   @override
   Widget build(BuildContext context) {

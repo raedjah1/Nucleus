@@ -5,6 +5,7 @@ import 'package:nucleus/modules/accounts/data/bloc/registration_bloc.dart';
 import 'package:nucleus/modules/accounts/ui/screens/login_with_email_screen.dart';
 import 'package:nucleus/shared/themes/dark_theme.dart';
 import 'package:nucleus/shared/themes/light_theme.dart';
+import 'package:nucleus/shared/ui/screens/home_screen.dart';
 import 'shared/index.dart' as shared_di;
 import 'modules/accounts/index.dart' as accounts_di;
 
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
             if (state is Authenticated) {
-              return const MyHomePage(title: "title");
+              return const HomeScreen();
             } else if (state is AuthenticationLoading) {
               return const Scaffold(
                 body: Center(

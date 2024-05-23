@@ -1,8 +1,14 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class VerifyPhoneFormWidget extends StatelessWidget {
-  const VerifyPhoneFormWidget({super.key});
+  final TextEditingController codeController;
+  final Function onVerify;
+
+  const VerifyPhoneFormWidget({
+    super.key,
+    required this.codeController,
+    required this.onVerify,
+  });
 
   @override
   Widget build(BuildContext context) {

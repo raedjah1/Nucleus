@@ -14,12 +14,39 @@ class LoginWithPhoneScreen extends StatefulWidget {
 }
 
 class _LoginWithPhoneScreenState extends State<LoginWithPhoneScreen> {
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController codeController = TextEditingController();
+
   void _notifyError(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
         content: Text(message),
       ),
+    );
+  }
+
+  void _saveToken(BuildContext context, String token) {
+    final bloc = BlocProvider.of<RegistrationBloc>(context);
+    bloc.add(
+      SaveToken(token),
+    );
+  }
+
+  void _onRegister(BuildContext context) {
+    final phone = phoneController.text;
+    final bloc = BlocProvider.of<RegistrationBloc>(context);
+    bloc.add(
+      RegisterWithPhone(phone),
+    );
+  }
+
+  void _onVerify(BuildContext context) {
+    final code = codeController.text;
+    final phone = phoneController.text;
+    final bloc = BlocProvider.of<RegistrationBloc>(context);
+    bloc.add(
+      VerifyPhone(code, phone),
     );
   }
 
@@ -32,9 +59,7 @@ class _LoginWithPhoneScreenState extends State<LoginWithPhoneScreen> {
           child: BlocListener<RegistrationBloc, RegistrationState>(
             listener: (context, state) {
               if (state is AccountTokenObtained) {
-                BlocProvider.of<RegistrationBloc>(context).add(
-                  SaveToken(state.token),
-                );
+                _saveToken(context, state.token);
               }
               if (state is TokenSaved) {
                 BlocProvider.of<AuthenticationBloc>(context).add(
@@ -57,11 +82,20 @@ class _LoginWithPhoneScreenState extends State<LoginWithPhoneScreen> {
                     child: CircularProgressIndicator(),
                   );
                 } else if (state is RegistrationInitial) {
-                  return const LoginWithPhoneFormWidget();
+                  return LoginWithPhoneFormWidget(
+                    phoneController: phoneController,
+                    onRegister: () => _onRegister(context),
+                  );
                 } else if (state is RegistrationFailed) {
-                  return const LoginWithPhoneFormWidget();
+                  return LoginWithPhoneFormWidget(
+                    phoneController: phoneController,
+                    onRegister: () => _onRegister(context),
+                  );
                 }
-                return const VerifyPhoneFormWidget();
+                return VerifyPhoneFormWidget(
+                  codeController: codeController,
+                  onVerify: () => _onVerify(context),
+                );
               },
             ),
           ),
