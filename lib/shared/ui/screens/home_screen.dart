@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:nucleus/modules/accounts/domain/models/account.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Account account;
+
+  const HomeScreen({
+    super.key,
+    required this.account,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

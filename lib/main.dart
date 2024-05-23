@@ -40,7 +40,9 @@ class MyApp extends StatelessWidget {
         home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
             if (state is Authenticated) {
-              return const HomeScreen();
+              return HomeScreen(
+                account: state.account,
+              );
             } else if (state is AuthenticationLoading) {
               return const Scaffold(
                 body: Center(

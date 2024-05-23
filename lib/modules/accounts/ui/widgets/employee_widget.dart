@@ -11,6 +11,48 @@ class EmployeeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Image.network("https://via.placeholder.com/150"),
+                  Column(
+                    children: [
+                      Text(employee.name),
+                      Text(employee.jobTitle.name),
+                    ],
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.phone),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.message),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.email),
+                    onPressed: () {},
+                  ),
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
