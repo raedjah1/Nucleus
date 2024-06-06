@@ -16,7 +16,7 @@ ThemeData _darkTheme() {
       surface: surfaceColorDark,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
-      onBackground: Colors.white,
+      onSurface: Colors.white,
     ),
     appBarTheme: base.appBarTheme.copyWith(
       backgroundColor: primaryColorDark,
