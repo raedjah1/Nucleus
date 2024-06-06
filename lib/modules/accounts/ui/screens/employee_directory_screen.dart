@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nucleus/modules/accounts/data/bloc/directory_bloc.dart';
 import 'package:nucleus/modules/accounts/domain/models/account.dart';
 import 'package:nucleus/modules/accounts/index.dart' as accounts_di;
+import 'package:nucleus/modules/accounts/ui/widgets/employee_widget.dart';
 
 class EmployeeDirectoryScreen extends StatefulWidget {
   const EmployeeDirectoryScreen({super.key});
@@ -13,7 +14,9 @@ class EmployeeDirectoryScreen extends StatefulWidget {
 }
 
 class _EmployeeDirectoryScreenState extends State<EmployeeDirectoryScreen> {
+  final TextEditingController searchController = TextEditingController();
   List<Account> employees = [];
+  List<Account> filteredEmployees = [];
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +45,35 @@ class _EmployeeDirectoryScreenState extends State<EmployeeDirectoryScreen> {
                   child: Text(state.message),
                 );
               }
-              return ListView.builder(
-                itemCount: employees.length,
-                itemBuilder: (context, index) {
-                  final employee = employees[index];
-                  return ListTile(
-                    title: Text(employee.name),
-                    subtitle: Text(employee.email),
-                  );
-                },
+              return Column(
+                children: [
+                  TextField(
+                    controller: searchController,
+                    decoration: const InputDecoration(
+                      labelText: "Search directory",
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        filteredEmployees = employees
+                            .where((employee) => employee.name
+                                .toLowerCase()
+                                .contains(value.toLowerCase()))
+                            .toList();
+                      });
+                    },
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: employees.length,
+                      itemBuilder: (context, index) {
+                        final employee = employees[index];
+                        return EmployeeWidget(
+                          employee: employee,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             },
           ),

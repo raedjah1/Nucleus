@@ -35,5 +35,40 @@ ThemeData _lightTheme() {
       ),
     ),
     textTheme: textTheme(base.textTheme),
+    inputDecorationTheme: base.inputDecorationTheme.copyWith(
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
+      prefixIconColor: primaryColorLight,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 10,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(
+          color: Colors.white,
+          width: 1,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(
+          color: Colors.white,
+          width: 1.5,
+        ),
+      ),
+      filled: true,
+      fillColor: base.colorScheme.shadow.withOpacity(0.075),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 0.5,
+        foregroundColor: Colors.white,
+        backgroundColor: primaryColorLight,
+        fixedSize: const Size(300, 40),
+      ),
+    ),
   );
 }
