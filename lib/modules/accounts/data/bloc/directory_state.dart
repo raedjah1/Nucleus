@@ -12,19 +12,19 @@ final class DirectoryInitial extends DirectoryState {}
 final class DirectoryLoading extends DirectoryState {}
 
 final class DirectoryLoaded extends DirectoryState {
-  final List<Account> accounts;
+final List<Account> accounts;
 
-  const DirectoryLoaded(this.accounts);
+const DirectoryLoaded(this.accounts);
 
-  @override
-  List<Object> get props => [accounts];
+@override
+List<Object> get props => [accounts];
 }
 
 final class DirectoryError extends DirectoryState {
-  final String message;
+final String message;
 
-  const DirectoryError(this.message);
+const DirectoryError(this.message);
 
-  @override
-  List<Object> get props => [message];
+@override
+List<Object> get props => [message];
 }

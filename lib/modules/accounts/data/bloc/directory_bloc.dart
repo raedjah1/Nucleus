@@ -13,9 +13,6 @@ class DirectoryBloc extends Bloc<DirectoryEvent, DirectoryState> {
     required this.getStaffDirectoryUseCase,
   }) : super(DirectoryInitial()) {
     on<LoadDirectory>(_onLoadDirectory);
-    on<DirectoryEvent>((event, emit) {
-      // TODO: implement event handler
-    });
   }
 
   void _onLoadDirectory(
@@ -23,8 +20,8 @@ class DirectoryBloc extends Bloc<DirectoryEvent, DirectoryState> {
     emit(DirectoryLoading());
     final response = await getStaffDirectoryUseCase.execute(null);
     response.fold(
-      (failure) => emit(DirectoryError(failure.message)),
-      (accounts) => emit(DirectoryLoaded(accounts)),
+          (failure) => emit(DirectoryError(failure.message)),
+          (accounts) => emit(DirectoryLoaded(accounts)),
     );
   }
 }

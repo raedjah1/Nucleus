@@ -3,6 +3,8 @@ import 'package:nucleus/modules/accounts/domain/repositories/account_repo.dart';
 import 'package:nucleus/shared/core/local_storage.dart';
 import 'package:nucleus/shared/core/rest_client.dart';
 
+import 'api_service.dart';
+
 class AccountService implements AccountRepo {
   final RestClient _restClient;
   final LocalStorage _localStorage;
@@ -33,7 +35,7 @@ class AccountService implements AccountRepo {
   @override
   Future<List<Account>> getAccounts() async {
     final response =
-        await _restClient.get<List<Map<String, dynamic>>>('/accounts');
+    await ApiService.fetchStaffData(); // Updated to use ApiService directly
     return response.map((e) => Account.fromJson(e)).toList();
   }
 }

@@ -1,104 +1,174 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nucleus/modules/accounts/data/bloc/authentication_bloc.dart';
 import 'package:nucleus/modules/accounts/data/bloc/registration_bloc.dart';
 import 'package:nucleus/modules/accounts/index.dart' as accounts_di;
-import 'package:nucleus/modules/accounts/ui/widgets/login_with_phone_form_widget.dart';
-import 'package:nucleus/modules/accounts/ui/widgets/verify_phone_form_widget.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginWithPhoneScreen extends StatefulWidget {
-  const LoginWithPhoneScreen({super.key});
+  const LoginWithPhoneScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginWithPhoneScreen> createState() => _LoginWithPhoneScreenState();
+  _LoginWithPhoneScreenState createState() => _LoginWithPhoneScreenState();
 }
 
 class _LoginWithPhoneScreenState extends State<LoginWithPhoneScreen> {
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController codeController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
-  void _notifyError(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.red,
-        content: Text(message),
-      ),
+  Future<void> registerPhoneNumber(String phoneNumber) async {
+    const apiUrl = 'https://pim-api.swat3.qcell.gm/api/v1';
+    const registerEndpoint = '/register';
+    final url = Uri.parse('$apiUrl$registerEndpoint');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'phoneNumber': phoneNumber}),
     );
-  }
 
-  void _saveToken(BuildContext context, String token) {
-    final bloc = BlocProvider.of<RegistrationBloc>(context);
-    bloc.add(
-      SaveToken(token),
-    );
-  }
 
-  void _onRegister(BuildContext context) {
-    final phone = phoneController.text;
-    final bloc = BlocProvider.of<RegistrationBloc>(context);
-    bloc.add(
-      RegisterWithPhone(phone),
-    );
-  }
+    if (response.statusCode == 200) {
+      // Handle successful registration and send OTP
+      Navigator.pushNamed(context, '/otp', arguments: phoneNumber); // Pass the phone number to OTP screen
+    } else {
+      // Handle error
+      final responseData = jsonDecode(response.body);
+      final errorMessage = responseData['message'] ?? 'Registration failed';
 
-  void _onVerify(BuildContext context) {
-    final code = codeController.text;
-    final phone = phoneController.text;
-    final bloc = BlocProvider.of<RegistrationBloc>(context);
-    bloc.add(
-      VerifyPhone(code, phone),
-    );
+      // Show the nicely formatted message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => accounts_di.sl<RegistrationBloc>(),
-      child: Scaffold(
-        body: SafeArea(
-          child: BlocListener<RegistrationBloc, RegistrationState>(
-            listener: (context, state) {
-              if (state is AccountTokenObtained) {
-                _saveToken(context, state.token);
-              }
-              if (state is TokenSaved) {
-                BlocProvider.of<AuthenticationBloc>(context).add(
-                  AppStart(),
-                );
-              }
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
 
-              if (state is RegistrationFailed) {
-                _notifyError(context, state.message);
-              }
-
-              if (state is VerificationFailed) {
-                _notifyError(context, state.message);
-              }
-            },
-            child: BlocBuilder<RegistrationBloc, RegistrationState>(
-              builder: (context, state) {
-                if (state is RegistrationLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is RegistrationInitial) {
-                  return LoginWithPhoneFormWidget(
-                    phoneController: phoneController,
-                    onRegister: () => _onRegister(context),
-                  );
-                } else if (state is RegistrationFailed) {
-                  return LoginWithPhoneFormWidget(
-                    phoneController: phoneController,
-                    onRegister: () => _onRegister(context),
-                  );
-                }
-                return VerifyPhoneFormWidget(
-                  codeController: codeController,
-                  onVerify: () => _onVerify(context),
-                );
-              },
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 64),
+            Center(
+              child: Image.asset(
+                'assets/nucleus_logo.png', // Make sure to add the logo to your assets folder
+                width: 160,
+                height: 142,
+              ),
             ),
-          ),
+            const SizedBox(height: 32),
+            Text(
+              'Welcome',
+              style: textTheme.headlineMedium!.copyWith(
+                color: colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Lets Get Started!',
+              style: textTheme.bodyMedium!.copyWith(
+                color: colorScheme.onSurface.withOpacity(0.85),
+              ),
+            ),
+            const SizedBox(height: 48),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                border: Border.all(color: colorScheme.onSurface.withOpacity(0.075), width: 1.5),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: TextField(
+                controller: _phoneController,
+                decoration: InputDecoration(
+                  hintText: 'Phone No.',
+                  border: InputBorder.none,
+                  hintStyle: textTheme.bodyMedium!.copyWith(
+                    color: colorScheme.onSurface.withOpacity(0.45),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: theme.colorScheme.onPrimary,
+                  backgroundColor: theme.colorScheme.primary,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                  elevation: 2,
+                ),
+                onPressed: () async {
+                  await registerPhoneNumber(_phoneController.text);
+                },
+                child: Text(
+                  'Next',
+                  style: textTheme.labelLarge!.copyWith(
+                    color: theme.colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: Divider(color: colorScheme.onSurface.withOpacity(0.5), thickness: 2),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    'or continue with',
+                    style: textTheme.bodyMedium!.copyWith(
+                      color: colorScheme.onSurface.withOpacity(0.55),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Divider(color: colorScheme.onSurface.withOpacity(0.5), thickness: 2),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                side: BorderSide(color: colorScheme.primary, width: 2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/emailLogin');
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.email, color: colorScheme.primary),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Email Address',
+                    style: textTheme.bodyMedium!.copyWith(
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

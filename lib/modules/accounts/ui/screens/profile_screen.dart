@@ -31,7 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Row(
                     children: [
                       Text(widget.account.name),
-                      Text(widget.account.jobTitle.name),
+                      // Text(widget.account.jobTitle.name),
                     ],
                   ),
                 ],

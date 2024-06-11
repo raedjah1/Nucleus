@@ -21,7 +21,9 @@ class GetStaffDirectoryUseCase
     } on ApiException catch (e) {
       return Left(ApiFailure(e.message));
     } catch (e) {
-      return Left(AppFailure('An Unexpected error occured'));
+      print('Exception: $e'); // Add logging
+      return Left(AppFailure('An Unexpected error occurred'));
     }
   }
 }
+

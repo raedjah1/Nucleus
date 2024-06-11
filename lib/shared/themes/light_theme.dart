@@ -13,7 +13,7 @@ ThemeData _lightTheme() {
     colorScheme: base.colorScheme.copyWith(
       primary: primaryColorLight,
       secondary: secondaryColorLight,
-      surface: backgroundColorLight,
+      surface: Colors.white,
       onPrimary: Colors.white,
       onSecondary: Colors.black,
       onSurface: Colors.black,
